@@ -1,0 +1,180 @@
+<!LOVE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiệu Ứng Cải Thiện</title>
+    <style>
+        /* --- Cài đặt chung --- */
+        body {
+            background-color: #000000;
+            color: Red;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        h1 {
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* --- HIỆU ỨNG CHỮ CHẠY --- */
+        .moving-text-container {
+            position: absolute;
+            bottom: 50px;
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .moving-text {
+            font-size: 24px;
+            color: #e94560;
+            font-weight: bold;
+            animation: marquee 15s linear infinite;
+        }
+
+        @keyframes marquee {
+            0%   { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* --- HIỆU ỨNG TIM RƠI --- */
+        .heart-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .heart {
+            position: absolute;
+            top: -50px;
+            font-size: 20px;
+            color: red;
+            animation: fall 10s linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* */
+        .heart-particle {
+            position: absolute;
+            font-size: 20px;
+            color: #e94560;
+            pointer-events: none;
+
+            animation: radiate 1.2s cubic-bezier(0.1, 0.7, 0.5, 1) forwards;
+            
+            z-index: 5;
+        }
+
+        @keyframes radiate {
+            
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            
+            
+            100% {
+                transform: translate(var(--end-x), var(--end-y)) scale(0.3);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="heart-container"></div>
+
+    <h1>Chúc bạn 20-10 thật tươi tắn, vui vẻ và gặp nhiều may mắn!</h1>
+
+    <div class="moving-text-container">
+        <div class="moving-text">
+            Hãy thử chạm vào màn hình đi
+        </div>
+    </div>
+
+    <script>
+        
+        
+        const heartContainer = document.querySelector('.heart-container');
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerText = '❤️';
+            
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            heart.style.fontSize = (Math.random() * 10 + 10) + 'px';
+            heart.style.animationDelay = (Math.random() * 3) + 's';
+
+            heartContainer.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 10000);
+        }
+
+        setInterval(createHeart, 300);
+
+        
+
+        document.body.addEventListener('click', function(event) {
+            let clickX = event.clientX;
+            let clickY = event.clientY;
+
+            
+            for (let i = 0; i < 10; i++) {
+                createHeartParticle(clickX, clickY);
+            }
+        });
+
+        function createHeartParticle(x, y) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-particle');
+            heart.innerHTML = '💖';
+            
+            heart.style.left = (x - 10) + 'px';
+            heart.style.top = (y - 10) + 'px';
+
+            
+            let randomX = (Math.random() - 0.5) * 200;
+            let randomY = (Math.random() - 0.5) * 200;
+
+            heart.style.setProperty('--end-x', randomX + 'px');
+            heart.style.setProperty('--end-y', randomY + 'px');
+
+            document.body.appendChild(heart);
+
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 1200);
+        }
+
+    </script>
+
+</body>
+</html>
